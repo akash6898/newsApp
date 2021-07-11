@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:newsapp/colors.dart';
 import 'package:newsapp/model/articles.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -10,7 +11,9 @@ class BuildNewsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
+      elevation: 3,
+      shadowColor: CustomColors.secondaryWhite,
+      color: Colors.white,
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -58,36 +61,41 @@ class BuildNewsCard extends StatelessWidget {
               ),
               Expanded(
                 flex: 3,
-                child: Container(
-                  height: 100,
-                  child: new Hero(
-                    tag: article.urlToImage!,
-                    transitionOnUserGestures: true,
-                    child: CachedNetworkImage(
-                      imageUrl: article.urlToImage ?? "aa",
-                      fit: BoxFit.fill,
-                      errorWidget: (context, url, error) {
-                        return Container(
-                          // width: 200,
-                          height: 100,
-                          color: Colors.grey.shade400,
-                          child: Center(
-                            child: Text(
-                              " No Image Found",
-                              style: TextStyle(color: Colors.white),
+                child: new Hero(
+                  tag: article.urlToImage!,
+                  transitionOnUserGestures: true,
+                  child: Container(
+                    height: 100,
+                    clipBehavior: Clip.none,
+                    decoration: BoxDecoration(),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: CachedNetworkImage(
+                        imageUrl: article.urlToImage ?? "aa",
+                        fit: BoxFit.fill,
+                        errorWidget: (context, url, error) {
+                          return Container(
+                            // width: 200,
+                            height: 100,
+                            color: Colors.grey.shade400,
+                            child: Center(
+                              child: Text(
+                                " No Image Found",
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      placeholder: (_, __) {
-                        return Shimmer.fromColors(
-                          baseColor: Colors.grey.shade300,
-                          highlightColor: Colors.grey.shade100,
-                          child: Container(
-                            width: 200,
-                          ),
-                        );
-                      },
+                          );
+                        },
+                        placeholder: (_, __) {
+                          return Shimmer.fromColors(
+                            baseColor: Colors.grey.shade300,
+                            highlightColor: Colors.grey.shade100,
+                            child: Container(
+                              width: 200,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),

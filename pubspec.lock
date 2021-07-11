@@ -169,6 +169,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  custom_check_box:
+    dependency: "direct main"
+    description:
+      name: custom_check_box
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
+  dart_countries:
+    dependency: "direct main"
+    description:
+      name: dart_countries
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   dart_style:
     dependency: transitive
     description:
@@ -242,6 +256,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_portal:
+    dependency: "direct main"
+    description:
+      name: flutter_portal
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   flutter_screenutil:
     dependency: "direct main"
     description:
