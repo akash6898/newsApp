@@ -11,19 +11,21 @@ class BuildNewsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      margin: EdgeInsets.symmetric(vertical: 5),
+      margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10))),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-        child: Container(
-          child: IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Flexible(
-                  flex: 4,
+        child: IntrinsicHeight(
+          // height: 100,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                flex: 4,
+                child: Container(
+                  // color: Colors.black,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,7 +42,7 @@ class BuildNewsCard extends StatelessWidget {
                       Text(
                         article.title ?? "Error",
                         maxLines: 3,
-                        textAlign: TextAlign.justify,
+                        // textAlign: TextAlign.justify,
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(
@@ -50,27 +52,47 @@ class BuildNewsCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: 20,
-                ),
-                Flexible(
-                  flex: 3,
-                  child: CachedNetworkImage(
-                    imageUrl: article.urlToImage ?? "aa",
-                    fit: BoxFit.fitHeight,
-                    placeholder: (_, __) {
-                      return Shimmer.fromColors(
-                        baseColor: Colors.grey.shade300,
-                        highlightColor: Colors.grey.shade100,
-                        child: Container(
-                          width: 200,
-                        ),
-                      );
-                    },
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  height: 100,
+                  child: new Hero(
+                    tag: article.urlToImage!,
+                    transitionOnUserGestures: true,
+                    child: CachedNetworkImage(
+                      imageUrl: article.urlToImage ?? "aa",
+                      fit: BoxFit.fill,
+                      errorWidget: (context, url, error) {
+                        return Container(
+                          // width: 200,
+                          height: 100,
+                          color: Colors.grey.shade400,
+                          child: Center(
+                            child: Text(
+                              " No Image Found",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      },
+                      placeholder: (_, __) {
+                        return Shimmer.fromColors(
+                          baseColor: Colors.grey.shade300,
+                          highlightColor: Colors.grey.shade100,
+                          child: Container(
+                            width: 200,
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         ),
       ),

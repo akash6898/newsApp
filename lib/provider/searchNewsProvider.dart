@@ -1,28 +1,35 @@
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:newsapp/api/newsApi.dart';
 import 'package:newsapp/model/articles.dart';
-import 'package:http/http.dart' as http;
 import 'package:newsapp/model/news_article_result.dart';
 
-class NewsProvider extends ChangeNotifier {
-  String country = "in";
+class SearchNewsProvider extends ChangeNotifier {
   bool isFetching = false;
   int pageSize = 10;
   int page = 0;
   bool endOfList = false;
-  String? error;
+  String? query;
   List<Articles> _articles = [];
 
   List<Articles> get fetchedArticals => _articles;
 
-  Future<void> fetchtopHeadlines() async {
-    page++;
+  changeQuery({required String text}) {
+    query = text;
+    page = 0;
+    endOfList = false;
+    _articles.clear();
+    fetchSearchResults();
+  }
+
+  Future<void> fetchSearchResults() async {
     isFetching = true;
     notifyListeners();
-    final response = await http.get(NewsApi.getTopHeadlines(
-        country: country, page: page, pageSize: pageSize));
+    page++;
+    print("query $query");
+    final response = await http.get(NewsApi.getSearchResult(
+        query: query ?? "", page: page, pageSize: pageSize));
     return _request(response);
   }
 
@@ -47,14 +54,11 @@ class NewsProvider extends ChangeNotifier {
           _articles.add(element);
         }
       });
-      
+      notifyListeners();
     } else {
       page--;
-      final _errorResult = jsonDecode(response.body);
-      error =
-          "Error code : ${_errorResult["code"]}, " + _errorResult["message"];
-     
+      print("error code" + response.statusCode.toString());
+      throw Exception("Failed to get top news");
     }
-    notifyListeners();
   }
 }

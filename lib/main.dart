@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:newsapp/provider/newsProvider.dart';
+import 'package:newsapp/provider/searchNewsProvider.dart';
 import 'package:newsapp/routes.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       builder: () => MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (_) => NewsProvider() ),
-             
+            ChangeNotifierProvider(create: (_) => SearchNewsProvider() ),
           ],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,

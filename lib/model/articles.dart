@@ -16,7 +16,7 @@ class Articles {
 
   Articles({
    required this.source,
-    this.author,
+   required this.author,
     this.title,
     this.description,
     this.url,
