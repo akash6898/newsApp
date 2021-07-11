@@ -41,20 +41,43 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("MyNEWS"),
+              Text(
+                "MyNEWS",
+                style: TextStyle(
+                    color: CustomColors.secondaryWhite,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500),
+              ),
               GestureDetector(
                 onTap: () {
                   _modalBottomSheetMenu(child: LocationSelector());
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text("Location"),
+                    Text(
+                      "Location",
+                      style: TextStyle(
+                          color: CustomColors.secondaryWhite,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500),
+                    ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Icon(Icons.place),
-                        Text(_newsProvider.selectedCountryName),
+                        Icon(
+                          Icons.place,
+                          size: 12,
+                        ),
+                        Text(
+                          _newsProvider.selectedCountryName,
+                          style: TextStyle(
+                              color: CustomColors.secondaryWhite,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ],
                     ),
                   ],
@@ -66,11 +89,12 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: Padding(
           padding: const EdgeInsets.all(10.0),
           child: FloatingActionButton(
+            backgroundColor: CustomColors.primaryBlue,
             // backgroundColor: Colors.amber,
             onPressed: () {
               _modalBottomSheetMenu(child: NewsSoucesFilter());
             },
-            child: Icon(Icons.filter_list),
+            child: ImageIcon(AssetImage("images/filter.png")),
           ),
         ),
         body: Padding(
@@ -188,7 +212,8 @@ class _HomePageState extends State<HomePage> {
                           EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                       filled: true,
                       hintText: "Search for news,topics..",
-                      hintStyle: TextStyle(fontSize: 14),
+                      hintStyle: TextStyle(
+                          fontSize: 14, color: CustomColors.primaryNavyBlue),
                       fillColor: CustomColors.secondarygrey,
                       disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
@@ -197,7 +222,8 @@ class _HomePageState extends State<HomePage> {
                           borderSide: BorderSide(
                             color: CustomColors.secondaryWhite,
                           )),
-                      suffixIcon: Icon(Icons.search))),
+                      suffixIcon: Icon(Icons.search,
+                          color: CustomColors.primaryNavyBlue))),
             ),
           ),
         ),
@@ -207,10 +233,22 @@ class _HomePageState extends State<HomePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Top Headlines"),
+            Text(
+              "Top Headlines",
+              style: TextStyle(
+                  fontSize: 16,
+                  color: CustomColors.primaryNavyBlue,
+                  fontWeight: FontWeight.w700),
+            ),
             Row(
               children: [
-                Text("Sort: "),
+                Text(
+                  "Sort: ",
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: CustomColors.primaryNavyBlue,
+                      fontWeight: FontWeight.w500),
+                ),
                 PortalEntry(
                   visible: isMenuOpen,
                   portal: GestureDetector(
@@ -232,17 +270,28 @@ class _HomePageState extends State<HomePage> {
                           });
                         },
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(_newsProvider
-                                .sortBy[_newsProvider.selectedSortBy]),
-                            Icon(Icons.arrow_circle_down_outlined),
+                            Text(
+                                _newsProvider
+                                    .sortBy[_newsProvider.selectedSortBy],
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: CustomColors.primaryNavyBlue,
+                                    fontWeight: FontWeight.w500)),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              size: 14,
+                            ),
                           ],
                         )),
                     portal: Material(
                       elevation: 8,
+                      color: CustomColors.secondaryWhite,
                       child: IntrinsicWidth(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             InkWell(
                               onTap: () {
@@ -250,8 +299,8 @@ class _HomePageState extends State<HomePage> {
                                 _newsProvider.changeSelectedSortBy(0);
                               },
                               child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 15),
+                                padding: EdgeInsets.only(
+                                    top: 5, bottom: 5, left: 13, right: 25),
                                 child: Text(_newsProvider.sortBy[0]),
                               ),
                             ),
@@ -261,8 +310,8 @@ class _HomePageState extends State<HomePage> {
                                 _newsProvider.changeSelectedSortBy(1);
                               },
                               child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 15),
+                                padding: EdgeInsets.only(
+                                    top: 5, bottom: 5, left: 13, right: 25),
                                 child: Text(_newsProvider.sortBy[1]),
                               ),
                             ),
@@ -272,8 +321,8 @@ class _HomePageState extends State<HomePage> {
                                 _newsProvider.changeSelectedSortBy(2);
                               },
                               child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 15),
+                                padding: EdgeInsets.only(
+                                    top: 5, bottom: 5, left: 13, right: 25),
                                 child: Text(_newsProvider.sortBy[2]),
                               ),
                             ),

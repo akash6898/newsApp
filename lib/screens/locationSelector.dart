@@ -4,6 +4,8 @@ import 'package:newsapp/model/countries.dart';
 import 'package:newsapp/provider/newsProvider.dart';
 import 'package:provider/provider.dart';
 
+import '../colors.dart';
+
 class LocationSelector extends StatefulWidget {
   @override
   _LocationSelectorState createState() => _LocationSelectorState();
@@ -29,9 +31,9 @@ class _LocationSelectorState extends State<LocationSelector> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Color.fromRGBO(249, 250, 254, 1),
+        color: CustomColors.secondaryWhite,
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
       ),
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
       child: Column(
@@ -44,19 +46,26 @@ class _LocationSelectorState extends State<LocationSelector> {
               width: MediaQuery.of(context).size.width / 7,
               height: 8,
               decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: CustomColors.secondarygrey,
                   borderRadius: BorderRadius.all(Radius.circular(4))),
             ),
           ),
           SizedBox(
             height: 15,
           ),
-          Text("Choose Your Location"),
+          Text(
+            "Choose Your Location",
+            style: TextStyle(
+                fontSize: 15,
+                color: CustomColors.primaryNavyBlue,
+                fontWeight: FontWeight.w700),
+          ),
           SizedBox(
             height: 10,
           ),
           Divider(
-            thickness: 2,
+            thickness: 1,
+            color: CustomColors.secondarygrey,
           ),
           Container(
             height: 200,
@@ -65,7 +74,15 @@ class _LocationSelectorState extends State<LocationSelector> {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(contryNames[index].values.first),
+                    Text(
+                      contryNames[index].values.first,
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: selectdCountry == contryNames[index].keys.first
+                              ? CustomColors.primaryBlue
+                              : CustomColors.primaryNavyBlue,
+                          fontWeight: FontWeight.w500),
+                    ),
                     Radio(
                         value: contryNames[index].keys.first,
                         groupValue: selectdCountry,
@@ -88,7 +105,15 @@ class _LocationSelectorState extends State<LocationSelector> {
             child: Container(
               width: MediaQuery.of(context).size.width / 3,
               child: ElevatedButton(
-                child: Text("Apply"),
+                style:
+                    ElevatedButton.styleFrom(primary: CustomColors.primaryBlue),
+                child: Text(
+                  "Apply",
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: CustomColors.secondaryWhite,
+                      fontWeight: FontWeight.w500),
+                ),
                 onPressed: () {
                   context
                       .read<NewsProvider>()

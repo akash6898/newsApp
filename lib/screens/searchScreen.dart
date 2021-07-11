@@ -4,6 +4,8 @@ import 'package:newsapp/provider/searchNewsProvider.dart';
 import 'package:newsapp/screens/buildNewsCard.dart';
 import 'package:provider/provider.dart';
 
+import '../colors.dart';
+
 class SeacrhScreen extends StatefulWidget {
   @override
   _SeacrhScreenState createState() => _SeacrhScreenState();
@@ -17,7 +19,9 @@ class _SeacrhScreenState extends State<SeacrhScreen> {
         Provider.of<SearchNewsProvider>(context);
 
     return Scaffold(
+      backgroundColor: CustomColors.secondaryWhite,
       appBar: AppBar(
+        backgroundColor: CustomColors.primaryBlue,
         leading: IconButton(
           icon: ImageIcon(AssetImage("images/back.png")),
           onPressed: () {
@@ -37,20 +41,54 @@ class _SeacrhScreenState extends State<SeacrhScreen> {
               tag: "Search",
               child: Material(
                 child: TextField(
-                  onChanged: (val) {
-                    _searchNewsProvider.changeQuery(text: val);
-                  },
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    filled: true,
-                    border: InputBorder.none,
-                    hintText: "Search for news,topics..",
-                    hintStyle: TextStyle(fontSize: 14),
-                    fillColor: Colors.grey.shade300,
-                    suffixIcon: Icon(Icons.search),
-                  ),
-                ),
+                    onChanged: (val) {
+                      _searchNewsProvider.changeQuery(text: val);
+                    },
+                    autofocus: true,
+                    cursorColor: CustomColors.primaryNavyBlue,
+                    style: TextStyle(color: CustomColors.primaryNavyBlue),
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        filled: true,
+                        hintText: "Search for news,topics..",
+                        hintStyle: TextStyle(
+                            fontSize: 14, color: CustomColors.primaryNavyBlue),
+                        fillColor: CustomColors.secondarygrey,
+                        disabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            borderSide: BorderSide(
+                              color: CustomColors.secondaryWhite,
+                            )),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            borderSide: BorderSide(
+                              color: CustomColors.secondaryWhite,
+                            )),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            borderSide: BorderSide(
+                              color: CustomColors.secondaryWhite,
+                            )),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            borderSide: BorderSide(
+                              color: CustomColors.secondaryWhite,
+                            )),
+                        suffixIcon: Icon(Icons.search,
+                            color: CustomColors.primaryNavyBlue))),
               ),
+            ),
+            SizedBox(
+              height: 10,
             ),
             _searchNewsProvider.isFetching &&
                     _searchNewsProvider.fetchedArticals.isEmpty

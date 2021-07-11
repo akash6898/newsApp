@@ -1,6 +1,7 @@
 import 'package:custom_check_box/custom_check_box.dart';
 import 'package:dart_countries/dart_countries.dart';
 import 'package:flutter/material.dart';
+import 'package:newsapp/colors.dart';
 import 'package:newsapp/model/news_article_result.dart';
 import 'package:newsapp/model/source.dart';
 import 'package:newsapp/provider/newsProvider.dart';
@@ -26,9 +27,9 @@ class _NewsSoucesFilterState extends State<NewsSoucesFilter> {
     NewsProvider _newsProvider = Provider.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Color.fromRGBO(249, 250, 254, 1),
+        color: CustomColors.secondaryWhite,
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
       ),
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
       child: Column(
@@ -41,19 +42,26 @@ class _NewsSoucesFilterState extends State<NewsSoucesFilter> {
               width: MediaQuery.of(context).size.width / 7,
               height: 8,
               decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: CustomColors.secondarygrey,
                   borderRadius: BorderRadius.all(Radius.circular(4))),
             ),
           ),
           SizedBox(
             height: 15,
           ),
-          Text("Filter by sources"),
+          Text(
+            "Filter by sources",
+            style: TextStyle(
+                fontSize: 15,
+                color: CustomColors.primaryNavyBlue,
+                fontWeight: FontWeight.w700),
+          ),
           SizedBox(
             height: 10,
           ),
           Divider(
-            thickness: 2,
+            thickness: 1,
+            color: CustomColors.secondarygrey,
           ),
           Container(
             height: 200,
@@ -67,7 +75,15 @@ class _NewsSoucesFilterState extends State<NewsSoucesFilter> {
             child: Container(
               width: MediaQuery.of(context).size.width / 3,
               child: ElevatedButton(
-                child: Text("Apply Filter"),
+                child: Text(
+                  "Apply Filter",
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: CustomColors.secondaryWhite,
+                      fontWeight: FontWeight.w500),
+                ),
+                style:
+                    ElevatedButton.styleFrom(primary: CustomColors.primaryBlue),
                 onPressed: _newsProvider.sources.length == 0
                     ? null
                     : () {
@@ -98,9 +114,19 @@ class _NewsSoucesFilterState extends State<NewsSoucesFilter> {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(_newsProvider.sources[index].name!),
+              Text(
+                _newsProvider.sources[index].name!,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: isActive
+                        ? CustomColors.primaryBlue
+                        : CustomColors.primaryNavyBlue,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w500),
+              ),
               Checkbox(
                   value: isActive,
+                  activeColor: CustomColors.primaryBlue,
                   onChanged: (value) {
                     setState(() {
                       if (value!) {

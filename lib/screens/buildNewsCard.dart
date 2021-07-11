@@ -38,6 +38,11 @@ class BuildNewsCard extends StatelessWidget {
                         article.source.name ?? "Error",
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontStyle: FontStyle.italic,
+                            color: CustomColors.primaryNavyBlue,
+                            fontWeight: FontWeight.w600),
                       ),
                       SizedBox(
                         height: 10,
@@ -47,11 +52,23 @@ class BuildNewsCard extends StatelessWidget {
                         maxLines: 3,
                         // textAlign: TextAlign.justify,
                         overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: CustomColors.primaryNavyBlue,
+                            fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      Text(giveDate(article.publishedAt ?? DateTime.now()))
+                      Text(
+                        giveDate(
+                          article.publishedAt ?? DateTime.now(),
+                        ),
+                        style: TextStyle(
+                            fontSize: 10,
+                            color: CustomColors.primaryNavyBlue,
+                            fontWeight: FontWeight.w300),
+                      )
                     ],
                   ),
                 ),
@@ -80,19 +97,30 @@ class BuildNewsCard extends StatelessWidget {
                             color: Colors.grey.shade400,
                             child: Center(
                               child: Text(
-                                " No Image Found",
+                                "No Image Found",
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
                           );
                         },
-                        placeholder: (_, __) {
-                          return Shimmer.fromColors(
-                            baseColor: Colors.grey.shade300,
-                            highlightColor: Colors.grey.shade100,
-                            child: Container(
-                              width: 200,
+                        progressIndicatorBuilder: (_, __, ___) {
+                          return Container(
+                            height: 90,
+                            width: 90,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16)),
+                              color: Colors.white,
                             ),
+                            child: Shimmer.fromColors(
+                                baseColor: Colors.grey.shade300,
+                                highlightColor: Colors.grey.shade100,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Colors.white,
+                                  ),
+                                )),
                           );
                         },
                       ),
