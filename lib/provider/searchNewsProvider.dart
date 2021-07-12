@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:newsapp/api/newsApi.dart';
 import 'package:newsapp/model/articles.dart';
 import 'package:newsapp/model/news_article_result.dart';
+import 'package:newsapp/model/source.dart';
 
 class SearchNewsProvider extends ChangeNotifier {
   bool isFetching = false;
@@ -11,26 +13,71 @@ class SearchNewsProvider extends ChangeNotifier {
   int page = 0;
   bool endOfList = false;
   String? query;
+  String? error;
   List<Articles> _articles = [];
-
+  List<String>? _sources = [];
+  String? country;
   List<Articles> get fetchedArticals => _articles;
 
-  changeQuery({required String text}) {
+  changeQuery(
+      {required String text,
+      required List<String> sourceList,
+      required String countryTemp}) {
+    print("in change query");
     query = text;
+
+    _sources = sourceList;
+    country = countryTemp;
+    initialFetchSearch();
+  }
+
+  void clear() {
     page = 0;
     endOfList = false;
+    error = null;
+    _articles.clear();
+  }
+
+  void initialFetchSearch() {
+    page = 0;
+    error = null;
+    endOfList = false;
+
     _articles.clear();
     fetchSearchResults();
   }
 
   Future<void> fetchSearchResults() async {
     isFetching = true;
+    error = null;
     notifyListeners();
     page++;
     print("query $query");
-    final response = await http.get(NewsApi.getSearchResult(
-        query: query ?? "", page: page, pageSize: pageSize));
-    return _request(response);
+    try {
+      if (_sources!.length == 0) {
+        final response = await http.get(NewsApi.getSearchResultByCountry(
+            query: query ?? "",
+            page: page,
+            pageSize: pageSize,
+            country: country!));
+        return _request(response);
+      } else {
+        final response = await http.get(NewsApi.getSearchResultBySources(
+            query: query ?? "",
+            page: page,
+            pageSize: pageSize,
+            sources: _sources!));
+        return _request(response);
+      }
+    } on SocketException {
+      page--;
+      print("socket ex");
+      print("error" + error.toString());
+      error = "No Internet Connection";
+      isFetching = false;
+
+      notifyListeners();
+    }
   }
 
   void _request(http.Response response) {
@@ -58,7 +105,11 @@ class SearchNewsProvider extends ChangeNotifier {
     } else {
       page--;
       print("error code" + response.statusCode.toString());
-      throw Exception("Failed to get top news");
+      final _errorResult = jsonDecode(response.body);
+      error =
+          "Error code : ${_errorResult["code"]}, " + _errorResult["message"];
+      notifyListeners();
+      // throw Exception("Failed to get top news");
     }
   }
 }

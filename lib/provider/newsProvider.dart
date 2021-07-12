@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dart_countries/dart_countries.dart';
 import 'package:flutter/cupertino.dart';
@@ -78,25 +79,34 @@ class NewsProvider extends ChangeNotifier {
     errorInFetchingSources = null;
     sources.clear();
     notifyListeners();
-    http.Response _response =
-        await http.get(NewsApi.getSources(country: selectedCountry));
-    if (_response.statusCode == 200) {
-      final result = jsonDecode(_response.body);
-      final List<dynamic> _temp = result["sources"];
-      _temp.forEach((element) {
-        if (element["id"] != null && element["name"] != null) {
-          sources.add(Source.fromJson(element));
-        }
-      });
-      sources.forEach((element) {
-        print(element.toJson());
-      });
-      print("fetch sources" + sources.length.toString());
-    } else {
-      final _errorResult = jsonDecode(_response.body);
-      errorInFetchingSources =
-          "Error code : ${_errorResult["code"]}, " + _errorResult["message"];
+    try {
+      http.Response _response =
+          await http.get(NewsApi.getSources(country: selectedCountry));
+      if (_response.statusCode == 200) {
+        final result = jsonDecode(_response.body);
+        final List<dynamic> _temp = result["sources"];
+        _temp.forEach((element) {
+          if (element["id"] != null && element["name"] != null) {
+            sources.add(Source.fromJson(element));
+          }
+        });
+        sources.forEach((element) {
+          print(element.toJson());
+        });
+        print("fetch sources" + sources.length.toString());
+      } else {
+        final _errorResult = jsonDecode(_response.body);
+        errorInFetchingSources =
+            "Error code : ${_errorResult["code"]}, " + _errorResult["message"];
+      }
+    } on SocketException {
+      print("socket ex");
+      print("error" + error.toString());
+      errorInFetchingSources = "No Internet Connection";
+      isFetchingSources = false;
+      notifyListeners();
     }
+
     notifyListeners();
   }
 
@@ -105,28 +115,39 @@ class NewsProvider extends ChangeNotifier {
       isFetching = true;
       notifyListeners();
       final http.Response response;
-      if (selectedSources.length == 0) {
-        response = await http.get(NewsApi.getTopHeadlinesByCountry(
-            country: selectedCountry, page: page, pageSize: pageSize));
-      } else {
-        response = await http.get(NewsApi.getTopHeadlinesBySources(
-            sources: selectedSources, page: page, pageSize: pageSize));
-      }
-      if (response.statusCode == 200) {
-        final result = jsonDecode(response.body);
-        final temp = NewsArticleResult.fromJson(result);
-        page = ((temp.totalResults!) / pageSize).ceil() + 1;
-      } else {
-        final _errorResult = jsonDecode(response.body);
-        error =
-            "Error code : ${_errorResult["code"]}, " + _errorResult["message"];
+      try {
+        if (selectedSources.length == 0) {
+          response = await http.get(NewsApi.getTopHeadlinesByCountry(
+              country: selectedCountry, page: page, pageSize: pageSize));
+        } else {
+          response = await http.get(NewsApi.getTopHeadlinesBySources(
+              sources: selectedSources, page: page, pageSize: pageSize));
+        }
+        if (response.statusCode == 200) {
+          final result = jsonDecode(response.body);
+          final temp = NewsArticleResult.fromJson(result);
+          page = ((temp.totalResults!) / pageSize).ceil() + 1;
+        } else {
+          final _errorResult = jsonDecode(response.body);
+          error = "Error code : ${_errorResult["code"]}, " +
+              _errorResult["message"];
+        }
+        endOfList = false;
+        _articles.clear();
+        fetchtopHeadlines();
+      } on SocketException {
+        print("socket ex");
+        print("error" + error.toString());
+        error = "No Internet Connection";
+        isFetching = false;
+        notifyListeners();
       }
     } else {
       page = 0;
+      endOfList = false;
+      _articles.clear();
+      fetchtopHeadlines();
     }
-    endOfList = false;
-    _articles.clear();
-    fetchtopHeadlines();
   }
 
   Future<void> fetchtopHeadlines() async {
@@ -139,14 +160,28 @@ class NewsProvider extends ChangeNotifier {
     error = null;
     notifyListeners();
     final response;
-    if (selectedSources.length == 0) {
-      response = await http.get(NewsApi.getTopHeadlinesByCountry(
-          country: selectedCountry, page: page, pageSize: pageSize));
-    } else {
-      response = await http.get(NewsApi.getTopHeadlinesBySources(
-          sources: selectedSources, page: page, pageSize: pageSize));
+    try {
+      if (selectedSources.length == 0) {
+        response = await http.get(NewsApi.getTopHeadlinesByCountry(
+            country: selectedCountry, page: page, pageSize: pageSize));
+      } else {
+        response = await http.get(NewsApi.getTopHeadlinesBySources(
+            sources: selectedSources, page: page, pageSize: pageSize));
+      }
+      _request(response);
+    } on SocketException {
+      if (selectedSortBy == 2) {
+        page++;
+      } else {
+        page--;
+      }
+      print("socket ex");
+      print("error" + error.toString());
+      error = "No Internet Connection";
+        isFetching = false;
+
+      notifyListeners();
     }
-    return _request(response);
   }
 
   void _request(http.Response response) {
@@ -177,8 +212,7 @@ class NewsProvider extends ChangeNotifier {
       });
       if (selectedSortBy == 2) {
         _articles.addAll(List.from(_tempArticles.reversed));
-      }
-      else{
+      } else {
         _articles.addAll(List.from(_tempArticles));
       }
       print("length" +

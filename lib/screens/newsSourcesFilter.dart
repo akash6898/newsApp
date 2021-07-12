@@ -5,6 +5,7 @@ import 'package:newsapp/colors.dart';
 import 'package:newsapp/model/news_article_result.dart';
 import 'package:newsapp/model/source.dart';
 import 'package:newsapp/provider/newsProvider.dart';
+import 'package:newsapp/screens/NoInternet.dart';
 import 'package:provider/provider.dart';
 
 class NewsSoucesFilter extends StatefulWidget {
@@ -32,73 +33,77 @@ class _NewsSoucesFilterState extends State<NewsSoucesFilter> {
             topLeft: Radius.circular(10), topRight: Radius.circular(10)),
       ),
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Align(
-            alignment: Alignment.topCenter,
-            child: Container(
-              width: MediaQuery.of(context).size.width / 7,
-              height: 8,
-              decoration: BoxDecoration(
-                  color: CustomColors.secondarygrey,
-                  borderRadius: BorderRadius.all(Radius.circular(4))),
-            ),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Text(
-            "Filter by sources",
-            style: TextStyle(
-                fontSize: 15,
-                color: CustomColors.primaryNavyBlue,
-                fontWeight: FontWeight.w700),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Divider(
-            thickness: 1,
-            color: CustomColors.secondarygrey,
-          ),
-          Container(
-            height: 200,
-            child: buildListView(_newsProvider),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              width: MediaQuery.of(context).size.width / 3,
-              child: ElevatedButton(
-                child: Text(
-                  "Apply Filter",
+      child: _newsProvider.errorInFetchingSources == "No Internet Connection"
+          ? NoInternet(onRetry: () {
+              _newsProvider.fetchSources();
+            })
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 7,
+                    height: 8,
+                    decoration: BoxDecoration(
+                        color: CustomColors.secondarygrey,
+                        borderRadius: BorderRadius.all(Radius.circular(4))),
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  "Filter by sources",
                   style: TextStyle(
                       fontSize: 15,
-                      color: CustomColors.secondaryWhite,
-                      fontWeight: FontWeight.w500),
+                      color: CustomColors.primaryNavyBlue,
+                      fontWeight: FontWeight.w700),
                 ),
-                style:
-                    ElevatedButton.styleFrom(primary: CustomColors.primaryBlue),
-                onPressed: _newsProvider.sources.length == 0
-                    ? null
-                    : () {
-                        print("sources listt");
-                        print(_selected);
-                        context
-                            .read<NewsProvider>()
-                            .editSource(tempsources: _selected);
-                        Navigator.of(context).pop();
-                      },
-              ),
+                SizedBox(
+                  height: 10,
+                ),
+                Divider(
+                  thickness: 1,
+                  color: CustomColors.secondarygrey,
+                ),
+                Container(
+                  height: 200,
+                  child: buildListView(_newsProvider),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: ElevatedButton(
+                      child: Text(
+                        "Apply Filter",
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: CustomColors.secondaryWhite,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          primary: CustomColors.primaryBlue),
+                      onPressed: _newsProvider.sources.length == 0
+                          ? null
+                          : () {
+                              print("sources listt");
+                              print(_selected);
+                              context
+                                  .read<NewsProvider>()
+                                  .editSource(tempsources: _selected);
+                              Navigator.of(context).pop();
+                            },
+                    ),
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
     );
   }
 
