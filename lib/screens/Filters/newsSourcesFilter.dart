@@ -1,11 +1,10 @@
-import 'package:custom_check_box/custom_check_box.dart';
 import 'package:dart_countries/dart_countries.dart';
 import 'package:flutter/material.dart';
-import 'package:newsapp/colors.dart';
+import 'package:newsapp/constants/colors.dart';
 import 'package:newsapp/model/news_article_result.dart';
 import 'package:newsapp/model/source.dart';
 import 'package:newsapp/provider/newsProvider.dart';
-import 'package:newsapp/screens/NoInternet.dart';
+import 'package:newsapp/screens/Common/NoInternet.dart';
 import 'package:provider/provider.dart';
 
 class NewsSoucesFilter extends StatefulWidget {
@@ -146,16 +145,36 @@ class _NewsSoucesFilterState extends State<NewsSoucesFilter> {
         },
         itemCount: _newsProvider.sources.length,
       );
-    } else if (_newsProvider.isFetching && _newsProvider.sources.length == 0) {
+    } else if (_newsProvider.isFetchingSources) {
       return Center(child: CircularProgressIndicator());
-    } else if (_newsProvider.errorInFetchingSources != null &&
-        _newsProvider.sources.length == 0) {
+    } else if (_newsProvider.errorInFetchingSources != null) {
       return Center(
-        child: Text(_newsProvider.errorInFetchingSources!),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(_newsProvider.errorInFetchingSources!,style:  TextStyle(
+                                    color: CustomColors.primaryNavyBlue)),
+            ElevatedButton(
+              onPressed: () {
+                _newsProvider.fetchSources();
+              },
+              child: Text(
+                "Try Again",
+                style: TextStyle(
+                    fontSize: 15,
+                    color: CustomColors.secondaryWhite,
+                    fontWeight: FontWeight.w500),
+              ),
+              style:
+                  ElevatedButton.styleFrom(primary: CustomColors.primaryBlue),
+            )
+          ],
+        ),
       );
     } else if (_newsProvider.sources.length == 0) {
       return Center(
-        child: Text("No Sources Found"),
+        child: Text("No Sources Found",style:  TextStyle(
+                                    color: CustomColors.primaryNavyBlue)),
       );
     }
     return SizedBox();

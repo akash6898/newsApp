@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../colors.dart';
+import '../../constants/colors.dart';
 
 class NoInternet extends StatelessWidget {
   NoInternet({required this.onRetry});

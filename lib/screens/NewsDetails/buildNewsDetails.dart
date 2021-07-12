@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:newsapp/colors.dart';
+import 'package:newsapp/constants/colors.dart';
 import 'package:newsapp/model/articles.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BuildNewsDetails extends StatefulWidget {
   final Articles article;
@@ -36,7 +37,7 @@ class _BuildNewsDetailsState extends State<BuildNewsDetails> {
               children: [
                 Container(
                   width: double.infinity,
-                  height: 300,
+                  height: 300.h,
                   color: Color.fromRGBO(0, 0, 0, 0.2),
                   child: Hero(
                     tag: widget.article.urlToImage!,
@@ -160,7 +161,10 @@ class _BuildNewsDetailsState extends State<BuildNewsDetails> {
                           )
                         ],
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
               ),

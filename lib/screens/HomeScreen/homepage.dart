@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/colors.dart';
+import 'package:newsapp/constants/colors.dart';
 import 'package:newsapp/provider/newsProvider.dart';
-import 'package:newsapp/screens/NoInternet.dart';
-import 'package:newsapp/screens/buildHeader.dart';
-import 'package:newsapp/screens/locationSelector.dart';
+import 'package:newsapp/screens/Common/NoInternet.dart';
+import 'package:newsapp/screens/HomeScreen/buildHeader.dart';
+import 'package:newsapp/screens/Filters/locationSelector.dart';
 import 'package:provider/provider.dart';
-import 'buildNewsCard.dart';
-import 'newsSourcesFilter.dart';
+import '../Common/buildNewsCard.dart';
+import '../Filters/newsSourcesFilter.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -94,7 +94,8 @@ class _HomePageState extends State<HomePage> {
             child: ImageIcon(AssetImage("images/filter.png")),
           ),
         ),
-        body: _newsProvider.error == "No Internet Connection"
+        body: (_newsProvider.error == "No Internet Connection" &&
+                _newsProvider.fetchedArticals.isEmpty)
             ? NoInternet(
                 onRetry: () {
                   _newsProvider.fetchInitialtopHeadlines();
@@ -152,14 +153,34 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ));
                       } else if (_newsProvider.error != null) {
-                        return Container(
-                            height: MediaQuery.of(context).size.height / 2,
-                            child: Center(
+                        return Center(
+                            child: Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                _newsProvider.error ?? "error",
+                                style: TextStyle(
+                                    color: CustomColors.primaryNavyBlue),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  _newsProvider.fetchtopHeadlines();
+                                },
                                 child: Text(
-                              _newsProvider.error ?? "error",
-                              style: TextStyle(
-                                  color: CustomColors.primaryNavyBlue),
-                            )));
+                                  "Try Again",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: CustomColors.secondaryWhite,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    primary: CustomColors.primaryBlue),
+                              )
+                            ],
+                          ),
+                        ));
                       } else {
                         // _newsProvider.fetchtopHeadlines();
                         return Container(

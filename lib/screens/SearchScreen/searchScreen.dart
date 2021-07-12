@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:newsapp/provider/newsProvider.dart';
 import 'package:newsapp/provider/searchNewsProvider.dart';
-import 'package:newsapp/screens/NoInternet.dart';
-import 'package:newsapp/screens/buildNewsCard.dart';
+import 'package:newsapp/screens/Common/NoInternet.dart';
+import 'package:newsapp/screens/Common/buildNewsCard.dart';
 import 'package:provider/provider.dart';
 
-import '../colors.dart';
+import '../../constants/colors.dart';
 
 class SeacrhScreen extends StatefulWidget {
   @override
@@ -21,16 +21,24 @@ class _SeacrhScreenState extends State<SeacrhScreen> {
 
     return WillPopScope(
       onWillPop: () async {
-        _searchNewsProvider.clear();
+        print("lenght pop" +
+            _searchNewsProvider.fetchedArticals.length.toString());
+
+        // _searchNewsProvider.clear();
         return true;
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: CustomColors.secondaryWhite,
         appBar: AppBar(
           backgroundColor: CustomColors.primaryBlue,
           leading: IconButton(
             icon: ImageIcon(AssetImage("images/back.png")),
             onPressed: () {
+              print("lenght pop" +
+                  _searchNewsProvider.fetchedArticals.length.toString());
+
+              _searchNewsProvider.clear();
               Navigator.of(context).pop();
             },
           ),
@@ -133,21 +141,52 @@ class _SeacrhScreenState extends State<SeacrhScreen> {
       }
       return Expanded(
         child: Center(
-            child: Center(
-                child: Text(
-          _searchNewsProvider.error ?? "error",
-          style: TextStyle(color: CustomColors.primaryNavyBlue),
-        ))),
+            child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              _searchNewsProvider.error ?? "error",
+              style: TextStyle(color: CustomColors.primaryNavyBlue),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _searchNewsProvider.fetchSearchResults();
+              },
+              child: Text(
+                "Try Again",
+                style: TextStyle(
+                    fontSize: 15,
+                    color: CustomColors.secondaryWhite,
+                    fontWeight: FontWeight.w500),
+              ),
+              style:
+                  ElevatedButton.styleFrom(primary: CustomColors.primaryBlue),
+            )
+          ],
+        )),
       );
     }
 
     if (_searchNewsProvider.fetchedArticals.isEmpty) {
       return Expanded(
           child: Center(
-        child: Text("No Results"),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ImageIcon(
+              AssetImage("images/newspaper.png",),
+              size: 40,
+              color: CustomColors.primaryNavyBlue
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text("No Results",style: TextStyle(color: CustomColors.primaryNavyBlue)),
+          ],
+        ),
       ));
     }
-
+    print("lenght" + _searchNewsProvider.fetchedArticals.length.toString());
     return Expanded(
       child: ListView.separated(
           controller: _scrollController
@@ -172,15 +211,35 @@ class _SeacrhScreenState extends State<SeacrhScreen> {
                 return Center(
                     child: Padding(
                   padding: const EdgeInsets.only(bottom: 20),
-                  child: Text("End Of List"),
+                  child: Text("End Of List",
+                      style: TextStyle(color: CustomColors.primaryNavyBlue)),
                 ));
               } else if (_searchNewsProvider.error != null) {
                 return Center(
                     child: Padding(
                   padding: const EdgeInsets.only(bottom: 20),
-                  child: Text(
-                    _searchNewsProvider.error ?? "error",
-                    style: TextStyle(color: CustomColors.primaryNavyBlue),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _searchNewsProvider.error ?? "error",
+                        style: TextStyle(color: CustomColors.primaryNavyBlue),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          _searchNewsProvider.fetchSearchResults();
+                        },
+                        child: Text(
+                          "Try Again",
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: CustomColors.secondaryWhite,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            primary: CustomColors.primaryBlue),
+                      )
+                    ],
                   ),
                 ));
               } else
@@ -205,5 +264,12 @@ class _SeacrhScreenState extends State<SeacrhScreen> {
           },
           itemCount: _searchNewsProvider.fetchedArticals.length + 1),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    // TODO: implement dispose
+    super.dispose();
   }
 }

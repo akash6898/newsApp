@@ -6,14 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:newsapp/api/newsApi.dart';
 import 'package:newsapp/model/articles.dart';
 import 'package:http/http.dart' as http;
-import 'package:newsapp/model/countries.dart';
+import 'package:newsapp/constants/countries.dart';
 import 'package:newsapp/model/news_article_result.dart';
 import 'package:newsapp/model/source.dart';
 
 class NewsProvider extends ChangeNotifier {
   String selectedCountry = "in";
   bool isFetching = false;
-  int pageSize = 10;
+  int pageSize = 15;
   int page = 0;
   bool endOfList = false;
   String? error;
@@ -94,10 +94,14 @@ class NewsProvider extends ChangeNotifier {
           print(element.toJson());
         });
         print("fetch sources" + sources.length.toString());
+        isFetchingSources = false;
+        notifyListeners();
       } else {
         final _errorResult = jsonDecode(_response.body);
         errorInFetchingSources =
             "Error code : ${_errorResult["code"]}, " + _errorResult["message"];
+        isFetchingSources = false;
+        notifyListeners();
       }
     } on SocketException {
       print("socket ex");
@@ -113,6 +117,8 @@ class NewsProvider extends ChangeNotifier {
   fetchInitialtopHeadlines() async {
     if (selectedSortBy == 2) {
       isFetching = true;
+      endOfList = false;
+      _articles.clear();
       notifyListeners();
       final http.Response response;
       try {
@@ -151,6 +157,7 @@ class NewsProvider extends ChangeNotifier {
   }
 
   Future<void> fetchtopHeadlines() async {
+    print("page no" + page.toString());
     if (selectedSortBy == 2) {
       page--;
     } else {
@@ -178,7 +185,7 @@ class NewsProvider extends ChangeNotifier {
       print("socket ex");
       print("error" + error.toString());
       error = "No Internet Connection";
-        isFetching = false;
+      isFetching = false;
 
       notifyListeners();
     }
@@ -214,6 +221,12 @@ class NewsProvider extends ChangeNotifier {
         _articles.addAll(List.from(_tempArticles.reversed));
       } else {
         _articles.addAll(List.from(_tempArticles));
+      }
+
+      if (!endOfList) {
+        if (_articles.length <= 7) {
+          fetchtopHeadlines();
+        }
       }
       print("length" +
           _articles.length.toString() +

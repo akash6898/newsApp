@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/screens/buildNewsDetials.dart';
-import 'package:newsapp/screens/homepage.dart';
-import 'package:newsapp/screens/searchScreen.dart';
+import 'package:newsapp/screens/NewsDetails/buildNewsDetails.dart';
+import 'package:newsapp/screens/HomeScreen/homepage.dart';
+import 'package:newsapp/screens/SearchScreen/searchScreen.dart';
 
 class Routes {
   static Route<dynamic>? fn(RouteSettings settings) {

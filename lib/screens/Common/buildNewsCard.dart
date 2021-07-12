@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:newsapp/colors.dart';
+import 'package:newsapp/constants/colors.dart';
 import 'package:newsapp/model/articles.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BuildNewsCard extends StatelessWidget {
   final Articles article;
@@ -82,7 +83,7 @@ class BuildNewsCard extends StatelessWidget {
                   tag: article.urlToImage!,
                   transitionOnUserGestures: true,
                   child: Container(
-                    height: 100,
+                    height: 100.h,
                     clipBehavior: Clip.none,
                     decoration: BoxDecoration(),
                     child: ClipRRect(
@@ -93,7 +94,7 @@ class BuildNewsCard extends StatelessWidget {
                         errorWidget: (context, url, error) {
                           return Container(
                             // width: 200,
-                            height: 100,
+                            height: 100.h,
                             color: Colors.grey.shade400,
                             child: Center(
                               child: Text(

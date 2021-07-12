@@ -1,16 +1,20 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:newsapp/colors.dart';
+import 'package:newsapp/constants/colors.dart';
 import 'package:newsapp/provider/newsProvider.dart';
 import 'package:newsapp/provider/searchNewsProvider.dart';
 import 'package:newsapp/routes.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(
+      DevicePreview(
+        enabled: !kReleaseMode,
+        builder: (context) => MyApp(), // Wrap your app
+      ),
+    );
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

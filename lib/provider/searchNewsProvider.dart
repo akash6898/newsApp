@@ -23,9 +23,8 @@ class SearchNewsProvider extends ChangeNotifier {
       {required String text,
       required List<String> sourceList,
       required String countryTemp}) {
-    print("in change query");
+    print("in change query " + text.length.toString());
     query = text;
-
     _sources = sourceList;
     country = countryTemp;
     initialFetchSearch();
@@ -36,6 +35,7 @@ class SearchNewsProvider extends ChangeNotifier {
     endOfList = false;
     error = null;
     _articles.clear();
+    notifyListeners();
   }
 
   void initialFetchSearch() {
@@ -44,7 +44,10 @@ class SearchNewsProvider extends ChangeNotifier {
     endOfList = false;
 
     _articles.clear();
-    fetchSearchResults();
+    if (query!.length == 0) {
+      notifyListeners();
+    } else
+      fetchSearchResults();
   }
 
   Future<void> fetchSearchResults() async {

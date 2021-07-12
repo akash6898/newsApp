@@ -1,10 +1,10 @@
 import 'package:dart_countries/dart_countries.dart';
 import 'package:flutter/material.dart';
-import 'package:newsapp/model/countries.dart';
+import 'package:newsapp/constants/countries.dart';
 import 'package:newsapp/provider/newsProvider.dart';
 import 'package:provider/provider.dart';
 
-import '../colors.dart';
+import '../../constants/colors.dart';
 
 class LocationSelector extends StatefulWidget {
   @override
@@ -68,7 +68,7 @@ class _LocationSelectorState extends State<LocationSelector> {
             color: CustomColors.secondarygrey,
           ),
           Container(
-            height: 200,
+            height: 180,
             child: ListView.builder(
               itemBuilder: (_, index) {
                 return Row(

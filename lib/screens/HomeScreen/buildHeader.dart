@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
-import 'package:newsapp/colors.dart';
+import 'package:newsapp/constants/colors.dart';
 import 'package:newsapp/provider/newsProvider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BuildHeader extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class _BuildHeaderState extends State<BuildHeader> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SizedBox(
-          height: 10,
+          height: 10.h,
         ),
         GestureDetector(
           onTap: () {
@@ -96,8 +97,8 @@ class _BuildHeaderState extends State<BuildHeader> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                  _newsProvider.sortBy[
-                                      _newsProvider.selectedSortBy],
+                                  _newsProvider
+                                      .sortBy[_newsProvider.selectedSortBy],
                                   style: TextStyle(
                                       fontSize: 12,
                                       color: CustomColors.primaryNavyBlue,
@@ -118,7 +119,7 @@ class _BuildHeaderState extends State<BuildHeader> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  isMenuOpen = isMenuOpen;
+                                  isMenuOpen = !isMenuOpen;
                                   _newsProvider.changeSelectedSortBy(0);
                                 },
                                 child: Padding(

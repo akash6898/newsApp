@@ -3,11 +3,11 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 
 class NewsApi {
-  // static String apiKey = "593f0bcb482242958a2505eca7fad8e2";
+   static String apiKey = "dbc4eef4e2df4130935264b3db180b06";
   // static String apiKey = "2653f5a7bc234e24935a4de4edf78351";
   // static String apiKey = "e74d34874c354f82bfc6f97c4701e27b";
   // static String apiKey = "fe06cb6e48044a7fb4e1bb07ac88deff";
-  static String apiKey = "48e42ff3afc644e2b956af60fc9f9f79";
+  // static String apiKey = "48e42ff3afc644e2b956af60fc9f9f79";
 
   static String endPoint = "https://newsapi.org/v2/";
 
@@ -33,16 +33,21 @@ class NewsApi {
   }
 
   static Uri getSearchResultByCountry(
-      {required String query, required int page, required int pageSize,required String country}) {
+      {required String query,
+      required int page,
+      required int pageSize,
+      required String country}) {
     String url = endPoint +
         'top-headlines?q=$query&country=$country&apiKey=$apiKey&pageSize=$pageSize&page=$page';
     return Uri.parse(url);
   }
 
   static Uri getSearchResultBySources(
-      {required String query, required int page, required int pageSize,required List<String> sources}) {
-
-         String _apiSources = "";
+      {required String query,
+      required int page,
+      required int pageSize,
+      required List<String> sources}) {
+    String _apiSources = "";
     sources.forEach((element) {
       _apiSources = _apiSources + element + ",";
     });
